@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Electron protocol test</title>
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            line-height: 1em;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container > div {
+            padding: 25px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div>
+        <h1>This is index page</h1>
+        <p>
+            Already loaded locally with use
+            <strong>electron-settings://</strong>
+            protocol.
+            <br>
+            Below you can find three other links, try them ;)
+        </p>
+        <br>
+        <a href="https://dawiidio.com/demo/electron">Load trusted domain (https://dawiidio.com/demo/electron)</a>
+        <br>
+        <br>
+        <a href="electron-settings://test">Load page with custom protocol (electron-settings://test)</a>
+        <br>
+        <br>
+        <a href="http://github.com">Try load untrusted domain (http://github.com)</a>
+    </div>
+</div>
+<script>
+    const h1 = document.querySelector('h1');
+    const name = window.electronAPI.getName();
+
+    if (name)
+        h1.innerText = `Hi ${escape(name)}! You have entered your name through trusted domain`;
+</script>
+</body>
+</html>

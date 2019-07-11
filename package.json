@@ -1,0 +1,20 @@
+{
+  "name": "electron-custom-protocol-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron index.js",
+    "build": "build",
+    "pack": "build --dir"
+  },
+  "keywords": [],
+  "author": "Dawid Wojda<dawiidio@gmail.com>",
+  "homepage": "https://dawiidio.com",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^5.0.6",
+    "electron-builder": "^20.44.4"
+  }
+}
