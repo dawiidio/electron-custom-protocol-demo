@@ -8,7 +8,7 @@ const {
 const PROTOCOL_PREFIX = 'electron-settings';
 const ALLOWED_HOSTS = ['dawiidio.com'];
 
-const isAllowedDomain = url => {
+const isAllowedHost = url => {
     const { host } = new URL(url);
 
     return ALLOWED_HOSTS.includes(host);
@@ -33,7 +33,7 @@ app.on('ready', () => {
 
     window.webContents.on('will-navigate', (ev, url) => {
         if (!isSettingsProtocol(url)) {
-            if (!isAllowedDomain(url)) {
+            if (!isAllowedHost(url)) {
                 ev.preventDefault();
             }
         }
