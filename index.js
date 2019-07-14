@@ -4,6 +4,7 @@ const {
     protocol,
     ipcMain,
 } = require('electron');
+const { createReadStream } = require('fs');
 
 const PROTOCOL_PREFIX = 'electron-settings';
 const ALLOWED_HOSTS = ['dawiidio.com'];
@@ -21,6 +22,11 @@ const isSettingsProtocol = url => {
 };
 
 let window;
+let name;
+
+protocol.registerSchemesAsPrivileged([
+    { scheme: PROTOCOL_PREFIX, privileges: { bypassCSP: true } }
+]);
 
 app.on('ready', () => {
     window = new BrowserWindow({
@@ -39,17 +45,27 @@ app.on('ready', () => {
         }
     });
 
-    protocol.registerHttpProtocol(PROTOCOL_PREFIX, req => {
-        const { host } = new URL(req.url);
-        const pathToPage = `file://${__dirname}/pages/${host}.html`;
+    protocol.registerStreamProtocol(
+        PROTOCOL_PREFIX,
+        ({ url, method }, callback) => {
+            const { host } = new URL(url);
+            const pathToPage = `${__dirname}/pages/${host}.html`;
 
-        window.loadURL(pathToPage);
-    });
+            callback({
+                statusCode: 200,
+                headers: {
+                    'content-type': 'text/html'
+                },
+                data: createReadStream(pathToPage)
+            });
+        },
+        (error) => {
+            if (error) console.error('Failed to register protocol');
+        }
+    );
 
     window.loadURL(`${PROTOCOL_PREFIX}://index`);
 });
-
-let name = '';
 
 ipcMain.on('setName', (ev, val) => {
     name = val;
